@@ -4,20 +4,49 @@ Created on Sun Dec 11 04:47:32 2022
 
 @author: LENOVO 
 """
-
+#importing the libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+#function to read the file
 def read_fle(finame):
+    '''
+    
+
+    Parameters
+    ----------
+    finame : csv file
+
+    Returns
+    -------
+    dt :dataframe with years as columns
+    dttranspose : dataframe with countries as columns
+
+    '''
+    
     dt = pd.read_csv(finame)
+    #transposing the file
     dttranspose= dt.set_index('Country Name').transpose()
     return dt, dttranspose
-    
+#taking the list of countries   
 count1= ['Argentina','China','Denmark','United Kingdom','India','Malaysia']
 count2= ['Belgium','Spain','Greece','Italy','Malta','Nepal']
 
+#filtering the data to plot bardata
 def bar_filter_data(dt):
+    """
+    
+
+    Parameters
+    ----------
+    dt : dataframe with years as columns
+
+    Returns
+    -------
+    dt : filtered data to plot bardata
+
+    """
     dt=dt[['Country Name','Indicator Name','2000','2005','2010','2015','2019']]
     dt = dt [(dt["Country Name"]=="Argentina") | 
                  (dt["Country Name"]=="China") | 
@@ -27,6 +56,7 @@ def bar_filter_data(dt):
                  (dt["Country Name"]=="Malaysia")]
     return dt
 
+#filtering the data to plot linedata
 def line_filter_data(dt):
     dt=dt[['Country Name','Indicator Name','2000','2005','2010','2015','2019']]
     dt =dt [(dt["Country Name"]=="Belgium") | 
@@ -36,7 +66,8 @@ def line_filter_data(dt):
                 (dt["Country Name"]=="Malta") | 
                 (dt["Country Name"]=="Nepal")]
     return dt
-    
+
+#function to plot bargraph    
 def bar_plot(dt, lbl1, lbl2):
     plt.figure(figsize=(35,20))
     axx= plt.subplot(1,1,1)
@@ -57,7 +88,8 @@ def bar_plot(dt, lbl1, lbl2):
     axx.bar_label(bar3, padding=2, rotation=90, fontsize= 17)
     plt.savefig("Barplots.png")
     plt.show()    
-     
+
+#function to plot linegraph     
 def line_plot(dt,lbl1,lbl2):
     plt.figure(figsize=(15,10))
     d = dt.set_index('Country Name')
@@ -73,14 +105,18 @@ def line_plot(dt,lbl1,lbl2):
     plt.legend(fontsize=11)
     plt.savefig("LinePlots.png")
     plt.show()
-             
+
+#reading the 1st file             
 pop_dt, pop_dt1 = read_fle("Population.csv")
 pop_dt = bar_filter_data(pop_dt)
+#reading the 2nd file       
 Agr_dt, Agr_dt1 = read_fle("Agricultures.csv") 
 Agr_dt = bar_filter_data(Agr_dt)
 
+#reading the 3rd file       
 CO2_dt, CO2_dta1=read_fle("Co2.csv")   
 CO2_dt= line_filter_data(CO2_dt)
+#reading the 4th file       
 NO2_dt, No2_dta1 = read_fle("Nitrousoxide.csv")             
 NO2_dt= line_filter_data(NO2_dt)          
 
@@ -89,3 +125,5 @@ bar_plot(Agr_dt, 'Agricultural land(% of land','Agricultural land(sq.km)')
 
 line_plot(CO2_dt,"CO2 Emission(KT)","CO2 Emission (KT)")
 line_plot(NO2_dt,"Nitrous oxide emission(%)","NO2 emission")
+
+
